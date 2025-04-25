@@ -12,11 +12,11 @@ export function Header({ isMenuOpen, onToggleMenu }: HeaderProps) {
   return (
     <header className="sticky top-0 px-0 py-4 shadow-[0_2px_4px_rgba(0,0,0,0.1)] z-[100]">
       <div className="flex justify-between items-center px-5 py-0 mx-auto my-0 max-w-[1200px]">
-        <img
+        {/* <img
           alt="EcoTracker Logo"
           src="https://images.pexels.com/photos/6990467/pexels-photo-6990467.jpeg"
           className="object-cover overflow-hidden w-full aspect-square"
-        />
+        /> */}
         <nav
           style={{
             "@media (max-width: 640px)": {
