@@ -5,7 +5,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import { EcoTracker } from "@/components/EcoTracker";
 import { Carousel } from "@/components/Carousel";
 
-async function getUserData(email: string) {
+async function getUserData() {
   try {
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user`, {
       headers: {

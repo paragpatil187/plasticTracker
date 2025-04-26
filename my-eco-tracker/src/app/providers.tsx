@@ -3,17 +3,19 @@
 import { Provider as ReduxProvider } from "react-redux";
 import { SessionProvider } from "next-auth/react";
 import { store } from "@/store/store";
+import { Session } from "next-auth";  // <-- import proper Session type
 
-export function Providers({
-  children,
-  session,
-}: {
+interface ProvidersProps {
   children: React.ReactNode;
-  session: any;
-}) {
+  session: Session | null;
+}
+
+export function Providers({ children, session }: ProvidersProps) {
   return (
     <SessionProvider session={session}>
-      <ReduxProvider store={store}>{children}</ReduxProvider>
+      <ReduxProvider store={store}>
+        {children}
+      </ReduxProvider>
     </SessionProvider>
   );
 }
