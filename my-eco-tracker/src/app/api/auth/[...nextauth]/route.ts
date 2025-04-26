@@ -1,10 +1,9 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import dbConnect from "../../../lib/mongodb"; // Correct your path if needed
-import User from "../../../models/User"; // Correct your path if needed
+import dbConnect from "../../../lib/mongodb";
+import User from "../../../models/User";
 
-// --- Auth Options ---
-const authOptions = {
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -34,14 +33,12 @@ const authOptions = {
       }
       return true;
     },
-
     async session({ session }) {
       try {
         await dbConnect();
         const user = await User.findOne({ email: session.user.email });
-
         if (user) {
-          session.user.id = user._id.toString();
+          session.user.id = user._id.toString();  // Make sure it's a string
           session.user.points = user.points;
           session.user.level = user.level;
         }
@@ -50,7 +47,6 @@ const authOptions = {
       }
       return session;
     },
-
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -60,13 +56,9 @@ const authOptions = {
   },
 };
 
-// --- API Route Handlers ---
+// 👇 Export authOptions ALSO separately
+export { authOptions };
+
+// 👇 Export NextAuth handler for GET and POST
 const handler = NextAuth(authOptions);
-
-export async function GET(request: Request) {
-  return handler(request);
-}
-
-export async function POST(request: Request) {
-  return handler(request);
-}
+export { handler as GET, handler as POST };
