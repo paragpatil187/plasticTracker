@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { NextRequest } from "next/server";
-import dbConnect from "@/lib/mongodb"; // use alias if you configured `@/`
-import User from "@/models/User";
+import dbConnect from "../../../lib/mongodb"; // use alias if you configured `@/`
+import User from "../../../models/User";
 
 export const authOptions = {
   providers: [
