@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { NextRequest } from "next/server";
-import dbConnect from "../../../lib/mongodb"; // use alias if you configured `@/`
+import dbConnect from "../../../lib/mongodb";
 import User from "../../../models/User";
 
 export const authOptions = {
@@ -57,11 +56,7 @@ export const authOptions = {
   },
 };
 
-// 👇 This is important to match Next.js API Route Signature
-export function GET(req: NextRequest) {
-  return NextAuth(authOptions)(req);
-}
+// 👇 Simple export without any manual handlers
+const handler = NextAuth(authOptions);
 
-export function POST(req: NextRequest) {
-  return NextAuth(authOptions)(req);
-}
+export { handler as GET, handler as POST };
