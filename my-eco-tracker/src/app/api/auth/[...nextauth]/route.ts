@@ -1,9 +1,12 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import dbConnect from "../../../lib/mongodb";
+import dbConnect from "../../../lib/mongodb"; // Use alias @ if set in tsconfig.json (or update path)
 import User from "../../../models/User";
 
-export const authOptions = {
+import { NextAuthOptions } from "next-auth"; // Proper type import
+
+
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -38,7 +41,7 @@ export const authOptions = {
         await dbConnect();
         const user = await User.findOne({ email: session.user.email });
         if (user) {
-          session.user.id = user._id.toString();  // Make sure it's a string
+          session.user.id = user._id.toString();
           session.user.points = user.points;
           session.user.level = user.level;
         }
@@ -56,13 +59,8 @@ export const authOptions = {
   },
 };
 
-
-// 👇 Export NextAuth handler for GET and POST
+// 👇 Correctly create handler
 const handler = NextAuth(authOptions);
-export async function GET(request: Request) {
-  return handler(request);
-}
 
-export async function POST(request: Request) {
-  return handler(request);
-}
+// ✅ Correct export
+export { handler as GET, handler as POST };
