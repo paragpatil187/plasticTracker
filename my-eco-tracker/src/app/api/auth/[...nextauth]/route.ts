@@ -1,8 +1,11 @@
+// app/api/auth/[...nextauth]/route.ts
+
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import dbConnect from "../../../lib/mongodb";
 import User from "../../../models/User";
 
+// NextAuth configuration
 export const authOptions = {
   providers: [
     GoogleProvider({
@@ -56,7 +59,7 @@ export const authOptions = {
   },
 };
 
-// 👇 Simple export without any manual handlers
+// Default handler for the NextAuth API
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
