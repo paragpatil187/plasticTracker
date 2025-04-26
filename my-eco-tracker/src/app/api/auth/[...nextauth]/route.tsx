@@ -1,7 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import dbConnect from "../../../lib/mongodb";
-import User from "../../../models/User";
+import { NextRequest } from "next/server";
+import dbConnect from "@/lib/mongodb"; // use alias if you configured `@/`
+import User from "@/models/User";
 
 export const authOptions = {
   providers: [
@@ -15,12 +16,9 @@ export const authOptions = {
       if (account?.provider === "google") {
         try {
           await dbConnect();
-
-          // Check if user exists
           const existingUser = await User.findOne({ email: user.email });
 
           if (!existingUser) {
-            // Create new user if doesn't exist
             await User.create({
               name: user.name,
               email: user.email,
@@ -28,7 +26,6 @@ export const authOptions = {
               emailVerified: user.emailVerified,
             });
           }
-
           return true;
         } catch (error) {
           console.error("Error during sign in:", error);
@@ -60,6 +57,11 @@ export const authOptions = {
   },
 };
 
-const handler = NextAuth(authOptions);
+// 👇 This is important to match Next.js API Route Signature
+export function GET(req: NextRequest) {
+  return NextAuth(authOptions)(req);
+}
 
-export { handler as GET, handler as POST };
+export function POST(req: NextRequest) {
+  return NextAuth(authOptions)(req);
+}
