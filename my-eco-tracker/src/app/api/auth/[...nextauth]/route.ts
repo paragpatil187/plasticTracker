@@ -1,12 +1,10 @@
-// app/api/auth/[...nextauth]/route.ts
-
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import dbConnect from "../../../lib/mongodb";
-import User from "../../../models/User";
+import dbConnect from "../../../lib/mongodb"; // Correct your path if needed
+import User from "../../../models/User"; // Correct your path if needed
 
-// NextAuth configuration
-export const authOptions = {
+// --- Auth Options ---
+const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -36,12 +34,14 @@ export const authOptions = {
       }
       return true;
     },
+
     async session({ session }) {
       try {
         await dbConnect();
         const user = await User.findOne({ email: session.user.email });
+
         if (user) {
-          session.user.id = user._id;
+          session.user.id = user._id.toString();
           session.user.points = user.points;
           session.user.level = user.level;
         }
@@ -50,6 +50,7 @@ export const authOptions = {
       }
       return session;
     },
+
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -59,7 +60,13 @@ export const authOptions = {
   },
 };
 
-// Default handler for the NextAuth API
+// --- API Route Handlers ---
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+export async function GET(request: Request) {
+  return handler(request);
+}
+
+export async function POST(request: Request) {
+  return handler(request);
+}
