@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth/next";
 // import { headers } from "next/headers";
 import { Providers } from "./providers";
-import { Header } from "@/components/Header";
+// import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import "./globals.css";
 
@@ -41,7 +41,7 @@ export default async function RootLayout({
           </a>
 
           <div className="min-h-screen flex flex-col">
-            <Header />
+            {/* <Header /> */}
             <main id="main-content" className="flex-grow">
               {children}
             </main>

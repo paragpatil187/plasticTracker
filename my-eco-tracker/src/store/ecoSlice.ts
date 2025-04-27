@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ActivityItem } from "../EcoTracker";
+import { ActivityItem } from "../components/EcoTracker";
 
 interface EcoState {
   points: number;

@@ -1,40 +1,25 @@
 import mongoose from "mongoose";
 
-if (!process.env.MONGO_URI) {
-  throw new Error("Please add your MONGODB_URI to .env.local");
+// Extend global type properly
+declare global {
+  // eslint-disable-next-line no-var
+  var mongooseConn: Promise<typeof mongoose> | undefined;
 }
 
-const MONGO_URI: string = process.env.MONGODB_URI;
+const MONGO_URI = process.env.MONGO_URI;
 
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+if (!MONGO_URI) {
+  throw new Error("Please define the MONGO_URI environment variable inside .env.local");
 }
 
-async function dbConnect() {
-  if (cached.conn) {
-    return cached.conn;
-  }
-
-  if (!cached.promise) {
-    const opts = {
+// Main connect function
+const dbConnect = async () => {
+  if (!global.mongooseConn) {
+    global.mongooseConn = mongoose.connect(MONGO_URI, {
       bufferCommands: false,
-    };
-
-    cached.promise = mongoose.connect(MONGO_URI, opts).then((mongoose) => {
-      return mongoose;
     });
   }
-
-  try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    throw e;
-  }
-
-  return cached.conn;
-}
+  return global.mongooseConn;
+};
 
 export default dbConnect;

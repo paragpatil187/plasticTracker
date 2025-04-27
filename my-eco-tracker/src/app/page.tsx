@@ -1,16 +1,18 @@
 import { Suspense } from "react";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "../app/api/auth/authOptions";
 import { EcoTracker } from "@/components/EcoTracker";
 import { Carousel } from "@/components/Carousel";
 
-async function getUserData() {
+async function getUserData(email: string) {
   try {
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user`, {
+      method: "POST", // optionally, if you want POST
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ email }), // Send email in body
       cache: "no-store",
     });
 
