@@ -1,4 +1,5 @@
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import dbConnect from "../../lib/mongodb";
 import User from "../../models/User";
@@ -23,6 +24,24 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const { email, password } = credentials as { email: string; password: string };
+
+        // Here you can add real database lookup for users
+        if (email === "test@example.com" && password === "password123") {
+          return { id: "1", name: "Test User", email };
+        }
+
+        // No valid user
+        return null;
+      },
     }),
   ],
   callbacks: {

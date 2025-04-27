@@ -1,16 +1,19 @@
 "use client";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-// import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-//   const router = useRouter();
+  const [email, setEmail] = useState("test@example.com"); // Default test email
+  const [password, setPassword] = useState("password123"); // Default test password
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your login logic here
+    // Optional: implement credential login here if needed
+    await signIn("credentials", {
+      email,
+      password,
+      callbackUrl: "/",
+    });
   };
 
   return (
@@ -20,6 +23,11 @@ export default function LoginPage() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Use test credentials: <br />
+            <span className="font-medium">Email:</span> test@example.com <br />
+            <span className="font-medium">Password:</span> password123
+          </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
